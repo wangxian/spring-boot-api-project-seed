@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -41,7 +42,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  */
 @Configuration
 public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
-    private final Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfigurer.class);
 
     // 当前激活的配置文件
     @Value("${spring.profiles.active}")
@@ -78,8 +79,8 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                 Result result = new Result();
                 if (e instanceof ServiceException) {
                     // 业务失败的异常，如 “账号或密码错误”
-                    result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
-                    logger.info(e.getMessage());
+                    result.setCode(((ServiceException) e).getCode()).setMessage(e.getMessage());
+                    LOGGER.info(e.getMessage());
                 } else if (e instanceof NoHandlerFoundException) {
                     result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
                 } else if (e instanceof ServletException) {
@@ -98,7 +99,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                         message = e.getMessage();
                     }
 
-                    logger.error(message, e);
+                    LOGGER.error(message, e);
                 }
 
                 responseResult(response, result);
@@ -114,11 +115,22 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         registry.addMapping("/**");
     }
 
+    // 添加资源目录 static
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        if(!registry.hasMappingForPattern("/static/**")){
+            registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        }
+        super.addResourceHandlers(registry);
+    }
+
     // 添加拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 接口签名认证拦截器，该签名认证比较简单，实际项目中可以使用Json Web Token或其他更好的方式替代。
-        if (!"dev".equals(env)) { //开发环境忽略签名认证
+        // 接口签名认证拦截器，该签名认证比较简单，实际项目中可以使用JSON Web Token或其他更好的方式替代。
+
+        // 开发环境忽略签名认证
+        if (!"dev".equals(env)) {
             registry.addInterceptor(new HandlerInterceptorAdapter() {
                 @Override
                 public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -127,7 +139,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                     if (pass) {
                         return true;
                     } else {
-                        logger.warn("签名认证失败，请求接口：{}，请求IP：{}，请求参数：{}",
+                        LOGGER.warn("签名认证失败，请求接口：{}，请求IP：{}，请求参数：{}",
                                 request.getRequestURI(), getIpAddress(request), JSON.toJSONString(request.getParameterMap()));
 
                         Result result = new Result();
@@ -148,7 +160,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         try {
             response.getWriter().write(JSON.toJSONString(result));
         } catch (IOException ex) {
-            logger.error(ex.getMessage());
+            LOGGER.error(ex.getMessage());
         }
     }
 
