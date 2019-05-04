@@ -17,7 +17,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.13.RELEASE</version>
+        <version>1.5.20.RELEASE</version>
     </parent>
 
     <dependencies>
@@ -35,6 +35,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <!--常用库依赖-->
         <dependency>
             <groupId>commons-codec</groupId>
@@ -50,12 +51,14 @@
             <artifactId>guava</artifactId>
             <version>23.0</version>
         </dependency>
+
         <!--MySQL JDBC驱动-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+
         <!--MyBatis 及 插件依赖-->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -77,18 +80,21 @@
             <artifactId>pagehelper</artifactId>
             <version>4.2.1</version>
         </dependency>
+
         <!--阿里 FastJson依赖-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.47</version>
         </dependency>
+
         <!--阿里 Druid Spring Boot Starter依赖-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.10</version>
         </dependency>
+
         <!--代码生成器依赖-->
         <dependency>
             <groupId>org.freemarker</groupId>
