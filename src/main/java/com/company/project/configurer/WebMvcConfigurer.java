@@ -6,6 +6,7 @@ import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.company.project.core.Result;
 import com.company.project.core.ResultCode;
+import com.company.project.core.ResultGenerator;
 import com.company.project.core.ServiceException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -74,17 +75,18 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
         exceptionResolvers.add(new HandlerExceptionResolver() {
             public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) {
-                Result result = new Result();
+                Result result;
                 if (e instanceof ServiceException) {
-                    // 业务失败的异常，如 “账号或密码错误”
-                    result.setCode(((ServiceException) e).getCode()).setMessage(e.getMessage());
-                    LOGGER.info(e.getMessage());
+                    // 业务失败的异常，如「账号或密码错误」
+                    result = ResultGenerator.genFailResult(e.getMessage(), ((ServiceException) e).getCode());
+                    LOGGER.info("[ServiceException]" + e.getMessage());
                 } else if (e instanceof NoHandlerFoundException) {
-                    result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
+                    result = ResultGenerator.genFailResult("接口 [" + request.getRequestURI() + "] 不存在", ResultCode.NOT_FOUND);
                 } else if (e instanceof ServletException) {
-                    result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
+                    result = ResultGenerator.genFailResult(e.getMessage());
                 } else {
-                    result.setCode(ResultCode.INTERNAL_SERVER_ERROR).setMessage("接口 [" + request.getRequestURI() + "] 内部错误，请联系管理员");
+                    result = ResultGenerator.genFailResult("接口 [" + request.getRequestURI() + "] 内部错误，请联系管理员", ResultCode.INTERNAL_SERVER_ERROR);
+
                     String message;
                     if (handler instanceof HandlerMethod) {
                         HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -146,8 +148,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                         LOGGER.warn("签名认证失败，请求接口：{}，请求IP：{}，请求参数：{}",
                                 request.getRequestURI(), getIpAddress(request), JSON.toJSONString(request.getParameterMap()));
 
-                        Result result = new Result();
-                        result.setCode(ResultCode.UNAUTHORIZED).setMessage("签名认证失败");
+                        Result result = ResultGenerator.genFailResult("签名认证失败", ResultCode.UNAUTHORIZED);
                         responseResult(response, result);
                         return false;
                     }

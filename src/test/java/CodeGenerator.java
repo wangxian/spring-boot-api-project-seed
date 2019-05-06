@@ -41,8 +41,8 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
 
     public static void main(String[] args) {
-        genCode("grade");
-        //genCodeByCustomModelName("输入表名","输入自定义Model名称");
+        // genCode("grade");
+        genCodeByCustomModelName("w_student", "Student");
     }
 
     /**

@@ -6,34 +6,25 @@ import com.alibaba.fastjson.JSON;
  * 统一API响应结果封装
  */
 public class Result<T> {
-    private int code;
-    private String message;
-    private T data;
 
-    public Result setCode(ResultCode resultCode) {
-        this.code = resultCode.code();
-        return this;
+    private ResultHead head = new ResultHead();
+
+    private T body;
+
+    public void setHead(ResultHead head) {
+        this.head = head;
     }
 
-    public int getCode() {
-        return code;
+    public ResultHead getHead() {
+        return this.head;
     }
 
-    public String getMessage() {
-        return message;
+    public T getBody() {
+        return this.body;
     }
 
-    public Result setMessage(String message) {
-        this.message = message;
-        return this;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public Result setData(T data) {
-        this.data = data;
+    public Result setBody(T body) {
+        this.body = body;
         return this;
     }
 
