@@ -5,8 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class PageException implements ErrorController {
@@ -20,14 +21,15 @@ public class PageException implements ErrorController {
 
     // 与 WebMvcConfigurer.configureHandlerExceptionResolvers 处理不同，这里主要是静态文件
     @RequestMapping("/error")
-    public String handleError(HttpServletResponse response) {
-        // 获取statusCode:401,404,500
-        Integer statusCode = response.getStatus();
-        LOGGER.debug("PageException.handleError()", "status=" + statusCode);
-        if (statusCode == 404) {
-            return "/static/404.html";
-        } else {
-            return "/static/50x.html";
-        }
+    @ResponseBody
+    public String handleError(HttpServletRequest request) {
+        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+        Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
+        return String.format(
+                "<html><body><h2>Error Page</h2><div>Status code: <b>%s</b></div>"
+                        + "<div>Exception Message: <b>%s</b></div><body></html>",
+                statusCode,
+                exception == null ? "N/A" : exception.getMessage()
+        );
     }
 }
