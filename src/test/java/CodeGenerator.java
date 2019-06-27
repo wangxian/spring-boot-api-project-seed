@@ -125,6 +125,9 @@ public class CodeGenerator {
         // 指定数据名，catalog
         tableConfiguration.setCatalog(JDBC_CATALOG);
 
+        // 默认为false，如果设置为true，在生成的SQL中，table名字不会加上catalog或schema
+        tableConfiguration.getProperties().setProperty("ignoreQualifiersAtRuntime", "true");
+
         if (StringUtils.isNotEmpty(modelName)) tableConfiguration.setDomainObjectName(modelName);
         tableConfiguration.setGeneratedKey(new GeneratedKey("id", "Mysql", true, null));
         context.addTableConfiguration(tableConfiguration);
