@@ -121,7 +121,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                 .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 
-    // 添加资源目录 static
+    // 添加资源目录 /static
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         if (!registry.hasMappingForPattern("/static/**")) {
