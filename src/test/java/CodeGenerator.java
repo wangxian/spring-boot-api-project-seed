@@ -18,7 +18,9 @@ import static com.company.project.core.ProjectConstant.*;
  */
 public class CodeGenerator {
     // JDBC配置，请修改为你项目的实际配置
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/test";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306";
+    // 数据库名，catalog
+    private static final String JDBC_CATALOG = "test";
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "111111";
     private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
@@ -47,7 +49,8 @@ public class CodeGenerator {
     public static void main(String[] args) {
         // genCode("users");
         // genCode("grade");
-        genCodeByCustomModelName("w_user", "User");
+        // genCode("simple");
+        // genCodeByCustomModelName("w_user", "User");
     }
 
     /**
@@ -69,14 +72,14 @@ public class CodeGenerator {
      * @param tableName 数据表名称
      * @param modelName 自定义的 Model 名称
      */
-    public static void genCodeByCustomModelName(String tableName, String modelName) {
+    private static void genCodeByCustomModelName(String tableName, String modelName) {
         genModelAndMapper(tableName, modelName);
         genService(tableName, modelName);
         genController(tableName, modelName);
     }
 
 
-    public static void genModelAndMapper(String tableName, String modelName) {
+    private static void genModelAndMapper(String tableName, String modelName) {
         Context context = new Context(ModelType.FLAT);
         context.setId("Potato");
         context.setTargetRuntime("MyBatis3Simple");
@@ -84,7 +87,12 @@ public class CodeGenerator {
         context.addProperty(PropertyRegistry.CONTEXT_ENDING_DELIMITER, "`");
 
         JDBCConnectionConfiguration jdbcConnectionConfiguration = new JDBCConnectionConfiguration();
+
+        // 设置可以获取表信息，否则不能生产@Id注解
+        jdbcConnectionConfiguration.getProperties().setProperty("useInformationSchema", "true");
+
         jdbcConnectionConfiguration.setConnectionURL(JDBC_URL);
+
         jdbcConnectionConfiguration.setUserId(JDBC_USERNAME);
         jdbcConnectionConfiguration.setPassword(JDBC_PASSWORD);
         jdbcConnectionConfiguration.setDriverClass(JDBC_DIVER_CLASS_NAME);
@@ -113,6 +121,10 @@ public class CodeGenerator {
 
         TableConfiguration tableConfiguration = new TableConfiguration(context);
         tableConfiguration.setTableName(tableName);
+
+        // 指定数据名，catalog
+        tableConfiguration.setCatalog(JDBC_CATALOG);
+
         if (StringUtils.isNotEmpty(modelName)) tableConfiguration.setDomainObjectName(modelName);
         tableConfiguration.setGeneratedKey(new GeneratedKey("id", "Mysql", true, null));
         context.addTableConfiguration(tableConfiguration);
@@ -126,7 +138,7 @@ public class CodeGenerator {
 
             boolean overwrite = true;
             DefaultShellCallback callback = new DefaultShellCallback(overwrite);
-            warnings = new ArrayList<String>();
+            warnings = new ArrayList<>();
             generator = new MyBatisGenerator(config, callback, warnings);
             generator.generate(null);
         } catch (Exception e) {
@@ -145,7 +157,7 @@ public class CodeGenerator {
         System.out.println(modelName + "Mapper.xml 生成成功");
     }
 
-    public static void genService(String tableName, String modelName) {
+    private static void genService(String tableName, String modelName) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
@@ -177,7 +189,7 @@ public class CodeGenerator {
         }
     }
 
-    public static void genController(String tableName, String modelName) {
+    private static void genController(String tableName, String modelName) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
