@@ -36,6 +36,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- freemarker 模板引擎 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
         <!--热部署支持-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
