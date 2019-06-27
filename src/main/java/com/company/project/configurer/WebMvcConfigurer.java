@@ -50,6 +50,9 @@ public class WebMvcConfigurer extends WebMvcConfigurationSupport {
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
         FastJsonConfig config = new FastJsonConfig();
 
+        // 设置 fastjson 日期格式
+        config.setDateFormat("yyyy-MM-dd HH:mm:ss");
+
         // 保留空的字段
         config.setSerializerFeatures(SerializerFeature.WriteMapNullValue);
 
