@@ -31,15 +31,10 @@ public class PageException implements ErrorController {
         String message = exception == null ? "null" : exception.getMessage();
         if (statusCode == 404) {
             message = "404 PAGE NOT FOUND";
+        } else {
+            message = String.format("未知错误(%s), %s", statusCode, message);
         }
 
-        return ResultGenerator.genFailResult(String.format("未知错误(%s), %s", statusCode, message), ResultCode.FAIL);
-
-        // return String.format(
-        //         "<html><body><h2>Error Page</h2><div>Status code: <b>%s</b></div>"
-        //                 + "<div>Exception Message: <b>%s</b></div><body></html>",
-        //         statusCode,
-        //         exception == null ? "N/A" : exception.getMessage()
-        // );
+        return ResultGenerator.genFailResult(message, ResultCode.FAIL);
     }
 }
