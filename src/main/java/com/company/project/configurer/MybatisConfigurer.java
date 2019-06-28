@@ -1,6 +1,6 @@
 package com.company.project.configurer;
 
-import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -28,7 +28,8 @@ public class MybatisConfigurer {
         factory.setTypeAliasesPackage(MODEL_PACKAGE);
 
         // 配置分页插件，详情请查阅官方文档
-        PageHelper pageHelper = new PageHelper();
+        // PageHelper pageHelper = new PageHelper(); // 5.x版本以下使用
+        PageInterceptor pageInterceptor = new PageInterceptor();
         Properties properties = new Properties();
 
         // 分页尺寸为 0 时查询所有纪录不再执行分页
@@ -40,10 +41,10 @@ public class MybatisConfigurer {
         // 支持通过 Mapper 接口参数来传递分页参数
         properties.setProperty("supportMethodsArguments", "true");
 
-        pageHelper.setProperties(properties);
+        pageInterceptor.setProperties(properties);
 
         // 添加插件
-        factory.setPlugins(new Interceptor[]{pageHelper});
+        factory.setPlugins(new Interceptor[]{pageInterceptor});
 
         // 添加XML目录
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
