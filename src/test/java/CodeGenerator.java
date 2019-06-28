@@ -47,10 +47,10 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
 
     public static void main(String[] args) {
-        // genCode("users");
+        // genCode("user");
         // genCode("grade");
         // genCode("simple");
-        // genCodeByCustomModelName("w_user", "User");
+        // genCodeByCustomModelName("w_name", "Name");
     }
 
     /**
@@ -174,15 +174,19 @@ public class CodeGenerator {
 
             File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_SERVICE + modelNameUpperCamel + "Service.java");
             if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
+                if ( !file.getParentFile().mkdirs() ) {
+                    System.out.println(file.getName() + ", 创建失败！");
+                }
             }
             cfg.getTemplate("service.ftl").process(data,
                     new FileWriter(file));
             System.out.println(modelNameUpperCamel + "Service.java 生成成功");
 
             File file1 = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_SERVICE_IMPL + modelNameUpperCamel + "ServiceImpl.java");
-            if (!file1.getParentFile().exists()) {
-                file1.getParentFile().mkdirs();
+            if ( !file1.getParentFile().exists() ) {
+                if ( file1.getParentFile().mkdirs() ) {
+                    System.out.println(file1.getName() + ", 创建失败！");
+                }
             }
             cfg.getTemplate("service-impl.ftl").process(data,
                     new FileWriter(file1));
@@ -206,8 +210,10 @@ public class CodeGenerator {
             data.put("basePackage", BASE_PACKAGE);
 
             File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_CONTROLLER + modelNameUpperCamel + "Controller.java");
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
+            if ( !file.getParentFile().exists() ) {
+                if ( file.getParentFile().mkdirs() ) {
+                    System.out.println(file.getName() + ", 创建失败！");
+                }
             }
 
             //cfg.getTemplate("controller-restful.ftl").process(data, new FileWriter(file));
