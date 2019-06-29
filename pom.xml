@@ -7,6 +7,9 @@
     <groupId>com.github.lihengming</groupId>
     <artifactId>spring-boot-api-project-seed</artifactId>
     <version>1.0</version>
+    <name>spring-boot-seed</name>
+    <description>Spring Boot 快速开始</description>
+
     <packaging>jar</packaging>
 
     <properties>
