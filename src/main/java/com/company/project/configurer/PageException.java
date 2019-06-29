@@ -1,5 +1,8 @@
 package com.company.project.configurer;
 
+import com.company.project.core.Result;
+import com.company.project.core.ResultCode;
+import com.company.project.core.ResultGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -21,14 +24,17 @@ public class PageException implements ErrorController {
     // 与 WebMvcConfigurer.configureHandlerExceptionResolvers 处理不同，这里主要是静态文件
     @RequestMapping("/error")
     @ResponseBody
-    public String handleError(HttpServletRequest request) {
+    public Result handleError(HttpServletRequest request) {
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
-        return String.format(
-                "<html><body><h2>Error Page</h2><div>Status code: <b>%s</b></div>"
-                        + "<div>Exception Message: <b>%s</b></div><body></html>",
-                statusCode,
-                exception == null ? "N/A" : exception.getMessage()
-        );
+
+        String message = exception == null ? "null" : exception.getMessage();
+        if (statusCode == 404) {
+            message = "404 PAGE NOT FOUND";
+        } else {
+            message = String.format("未知错误(%s), %s", statusCode, message);
+        }
+
+        return ResultGenerator.genFailResult(message, ResultCode.FAIL);
     }
 }
