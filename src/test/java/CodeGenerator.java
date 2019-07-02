@@ -20,7 +20,7 @@ public class CodeGenerator {
     // JDBC配置，请修改为你项目的实际配置
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306";
     // 数据库名，catalog
-    private static final String JDBC_CATALOG = "test";
+    private static final String JDBC_CATALOG = "db1";
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "111111";
     private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
@@ -47,7 +47,8 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
 
     public static void main(String[] args) {
-        // genCode("user");
+        // genCode("user1");
+        // genCode("user2");
         // genCode("grade");
         // genCode("simple");
         // genCodeByCustomModelName("w_name", "Name");

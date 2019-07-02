@@ -1,4 +1,4 @@
-package com.company.project.configurer;
+package com.company.project.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -37,8 +37,8 @@ import java.util.List;
  * Spring MVC 配置
  */
 @Configuration
-public class WebMvcConfigurer extends WebMvcConfigurationSupport {
-    private final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfigurer.class);
+public class WebMvcConfig extends WebMvcConfigurationSupport {
+    private final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfig.class);
 
     // 当前激活的配置文件
     @Value("${spring.profiles.active}")

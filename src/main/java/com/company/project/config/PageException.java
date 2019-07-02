@@ -1,4 +1,4 @@
-package com.company.project.configurer;
+package com.company.project.config;
 
 import com.company.project.core.Result;
 import com.company.project.core.ResultCode;
