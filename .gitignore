@@ -1,5 +1,37 @@
 target/
 
+### common ###
+
+*.log
+*.cache
+*.csv
+*.dat
+*.seed
+*.out
+*.pid
+*.gz
+.git
+pids
+node_modules
+*.sqlite
+.DS_Store
+.DS_Store?
+._*
+.git
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+*.sublime-workspace
+*.sublime-project
+/nbproject/
+.tags
+.project
+.settings/
+.history/
+.vscode
+
 ### STS ###
 .apt_generated
 .classpath
