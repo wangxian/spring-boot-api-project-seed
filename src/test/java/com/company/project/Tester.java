@@ -1,4 +1,4 @@
-package com.conpany.project;
+package com.company.project;
 
 
 import com.company.project.Application;
