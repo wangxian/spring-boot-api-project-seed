@@ -57,6 +57,7 @@ public class User1Controller {
      * @param size
      * @return
      */
+    @SuppressWarnings("unchecked")
     @GetMapping("/list")
     public Result list(@RequestParam(defaultValue = "10") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size, "id desc");
