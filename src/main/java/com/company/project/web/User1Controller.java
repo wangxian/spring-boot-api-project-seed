@@ -47,11 +47,21 @@ public class User1Controller {
         return ResultGenerator.genSuccessResult(user1);
     }
 
+    /**
+     * 列表
+     *
+     * 注意：排序只有 传了 分页才起作用
+     * http://localhost:8080/user1/list?size=4&page=1
+     *
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("/list")
     public Result list(@RequestParam(defaultValue = "10") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size, "id desc");
         List<User1> list = user1Service.findAll();
-        PageInfo pageInfo = new PageInfo(list); // 123
+        PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 }
